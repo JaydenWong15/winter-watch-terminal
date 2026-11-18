@@ -1,0 +1,7 @@
+name = "winter-watch-terminal"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+[[kv_namespaces]]
+binding = "RATE"
+id = "9bcab7678b5243e59b824f5ab9076127"
