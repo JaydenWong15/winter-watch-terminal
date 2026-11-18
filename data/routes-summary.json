@@ -1,0 +1,184 @@
+{
+ "source": "Dún Laoghaire-Rathdown County Council — Gritting Routes (data.gov.ie, CC-BY 4.0)",
+ "source_url": "https://data.gov.ie/dataset/gritting-routes-dlr",
+ "retrieved": "2026-11-18",
+ "note": "Route length computed by Winter Watch from the published WGS84 line geometry (haversine), not from the dataset's own Shape__Len field (units/CRS not stated).",
+ "routes": [
+  {
+   "id": "R1",
+   "name": "Ballyogan",
+   "length_km": 25.6,
+   "centroid": {
+    "lon": -6.1881,
+    "lat": 53.2605
+   },
+   "bbox": [
+    -6.229255886444466,
+    53.23947231347376,
+    -6.142946891213421,
+    53.28083323271106
+   ],
+   "assignedTruck": "T1"
+  },
+  {
+   "id": "R2",
+   "name": "Booterstown - Dun Laoghaire",
+   "length_km": 31.3,
+   "centroid": {
+    "lon": -6.1547,
+    "lat": 53.2871
+   },
+   "bbox": [
+    -6.205233458018483,
+    53.266466717053895,
+    -6.122002420632514,
+    53.31180422443817
+   ],
+   "assignedTruck": "T2"
+  },
+  {
+   "id": "R3",
+   "name": "Churchtown",
+   "length_km": 23.4,
+   "centroid": {
+    "lon": -6.255,
+    "lat": 53.2838
+   },
+   "bbox": [
+    -6.280558460318116,
+    53.26954906062054,
+    -6.23981407433793,
+    53.30785682143033
+   ],
+   "assignedTruck": "T3"
+  },
+  {
+   "id": "R4",
+   "name": "Dalkey - Killiney",
+   "length_km": 20.1,
+   "centroid": {
+    "lon": -6.1167,
+    "lat": 53.2647
+   },
+   "bbox": [
+    -6.134363540775923,
+    53.23308383648228,
+    -6.095168135111492,
+    53.28948784808538
+   ],
+   "assignedTruck": "T4"
+  },
+  {
+   "id": "R5",
+   "name": "Foxrock +",
+   "length_km": 19.6,
+   "centroid": {
+    "lon": -6.1844,
+    "lat": 53.2811
+   },
+   "bbox": [
+    -6.210888111085197,
+    53.25454016091005,
+    -6.150637179714558,
+    53.2947041580174
+   ],
+   "assignedTruck": "T5"
+  },
+  {
+   "id": "R6",
+   "name": "Infill Route",
+   "length_km": 27.5,
+   "centroid": {
+    "lon": -6.2512,
+    "lat": 53.274
+   },
+   "bbox": [
+    -6.296589666419441,
+    53.24729161427301,
+    -6.208254193179984,
+    53.31083637490684
+   ],
+   "assignedTruck": "T6"
+  },
+  {
+   "id": "R7",
+   "name": "MARC Contract",
+   "length_km": 24.9,
+   "centroid": {
+    "lon": -6.1753,
+    "lat": 53.2451
+   },
+   "bbox": [
+    -6.282462233848632,
+    53.20015301919645,
+    -6.119279256002133,
+    53.272050242665806
+   ],
+   "assignedTruck": "T7"
+  },
+  {
+   "id": "R8",
+   "name": "Mountain",
+   "length_km": 24.5,
+   "centroid": {
+    "lon": -6.2219,
+    "lat": 53.2379
+   },
+   "bbox": [
+    -6.287489462198418,
+    53.211373068743676,
+    -6.181621029671284,
+    53.268032242837194
+   ],
+   "assignedTruck": "T8"
+  },
+  {
+   "id": "R9",
+   "name": "N11",
+   "length_km": 17.8,
+   "centroid": {
+    "lon": -6.172,
+    "lat": 53.2677
+   },
+   "bbox": [
+    -6.234002960799856,
+    53.21374715492692,
+    -6.119106755213067,
+    53.309899816350764
+   ],
+   "assignedTruck": "T9"
+  },
+  {
+   "id": "R10",
+   "name": "Rathmichael",
+   "length_km": 25.2,
+   "centroid": {
+    "lon": -6.1361,
+    "lat": 53.2414
+   },
+   "bbox": [
+    -6.192349954062617,
+    53.199419378315675,
+    -6.117106174735977,
+    53.266771811537204
+   ],
+   "assignedTruck": "T10"
+  },
+  {
+   "id": "R11",
+   "name": "Sandyford +",
+   "length_km": 19.8,
+   "centroid": {
+    "lon": -6.2231,
+    "lat": 53.2843
+   },
+   "bbox": [
+    -6.2477162008544305,
+    53.271879558203246,
+    -6.13539822930334,
+    53.31330700770233
+   ],
+   "assignedTruck": "T11"
+  }
+ ]
+}

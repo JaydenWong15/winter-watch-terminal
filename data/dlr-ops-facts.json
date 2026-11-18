@@ -1,0 +1,47 @@
+{
+  "source": "Dún Laoghaire-Rathdown County Council — Winter Service Plan 2024/2025",
+  "source_url": "https://dlrcoco.ie/sites/dlrcoco/files/2024-10/DLR%20Winter%20Service%20Plan_2024_2025_Issue.pdf",
+  "retrieved": "2026-11-18",
+  "fleet": {
+    "regularGrittingTrucks": 10,
+    "spareGrittingTrucks": 3,
+    "spareDemountableGrittingUnits": 3,
+    "qualifiedDrivers": 12,
+    "regularDrivers": 10,
+    "spareDrivers": 2,
+    "depot": "Ballyogan Operations Centre",
+    "note": "One regular truck + driver assigned per route (10 routes : 10 trucks). Section 3.2/3.4.1, p.21-22."
+  },
+  "timing": {
+    "treatmentRunHours": 2,
+    "normalStartTimes": ["19:00", "05:00"],
+    "note": "\"A treatment run for each gritting truck would typically take approximately 2 hours to complete. Gritting normally take place at 7pm and/or 5am, depending on the weather conditions.\" p.11-12 (section 1.9)."
+  },
+  "saltStock": {
+    "minimumFullTreatments": 20,
+    "note": "Minimum stock = 20 full treatments of the entire 10-route network at max spread rate. Section 3.5.4."
+  },
+  "spreadRateMatrix_gPerM2": {
+    "note": "DLR's own Precautionary Treatment matrix (section 4.2.2) — target dry-salt spread rate by forecast Road Surface Temperature (RST), 'Good' spreader capability. Winter Watch's code picks the band from the live forecast's 2m temperature as a proxy for RST (see FLAGS-LOG) and shows this exact table as the citation.",
+    "bands": [
+      { "rstMaxC": -1.0, "label": "At or above -1.0°C", "dryDampRoad": 8,  "wetRoad": 8 },
+      { "rstMaxC": -2.0, "label": "-1.1°C to -2.0°C",   "dryDampRoad": 9,  "wetRoad": 8 },
+      { "rstMaxC": -3.0, "label": "-2.1°C to -3.0°C",   "dryDampRoad": 17, "wetRoad": 13 },
+      { "rstMaxC": -4.0, "label": "-3.1°C to -4.0°C",   "dryDampRoad": 23, "wetRoad": 17 },
+      { "rstMaxC": -5.0, "label": "-4.1°C to -5.0°C",   "dryDampRoad": 28, "wetRoad": 21 },
+      { "rstMaxC": -7.0, "label": "-5.1°C to -7.0°C",   "dryDampRoad": 39, "wetRoad": 30 },
+      { "rstMaxC": -10.0,"label": "-7.1°C to -10.0°C",  "dryDampRoad": 54, "wetRoad": 40 },
+      { "rstMaxC": -15.0,"label": "-10.1°C to -15.0°C", "dryDampRoad": 75, "wetRoad": 56 }
+    ]
+  },
+  "decisionGuide": {
+    "note": "Qualitative guidance from section 4.2.1 (Decision Matrix Guide), used by the AI only to EXPLAIN the code's verdict, never to decide it.",
+    "points": [
+      "Salt before frost when the road is dry, damp or wet and frost is expected.",
+      "Hoar frost is hardest to time: salt deposited too early on a dry road can disperse before it takes effect; ideally treat as the frost is forming.",
+      "If rain is freezing on contact with the road, this is the most serious condition and requires full precautionary treatment even on dry roads.",
+      "Salt is ineffective in the short term below -7°C; abrasives should be used instead when temperatures are expected to stay below -7°C for long periods."
+    ]
+  },
+  "saltIneffectiveBelowC": -7
+}

@@ -1,0 +1,883 @@
+{
+ "source": "Met Éireann — Dublin Airport daily data, station 532 (CC-BY 4.0)",
+ "source_url": "https://data.gov.ie/dataset/dublin-airport-daily-data",
+ "retrieved": "2026-11-18",
+ "stationCoords": {
+  "lat": 53.428,
+  "lon": -6.241,
+  "elevation_m": 71
+ },
+ "definitions": {
+  "winterYear": "Winter spans Nov(prev year)-Mar(this year); labelled by the January year.",
+  "airFrostNights": "Days where mintp (min air temp) <= 0C",
+  "groundFrostNights": "Days where gmin (09utc grass min temp) <= 0C — best available proxy for road/ground frost",
+  "icyRainNights": "Days where gmin <= 0C AND rain > 0.2mm — rain that likely froze on contact",
+  "excludedFields": "Count of days in that winter where the reading was missing or flagged not-available and was dropped from that specific stat (day itself is kept)."
+ },
+ "winters": [
+  {
+   "winterYear": 1942,
+   "days": 90,
+   "airFrostNights": 30,
+   "groundFrostNights": 38,
+   "icyRainNights": 14,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1943,
+   "days": 151,
+   "airFrostNights": 21,
+   "groundFrostNights": 49,
+   "icyRainNights": 15,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1944,
+   "days": 152,
+   "airFrostNights": 30,
+   "groundFrostNights": 52,
+   "icyRainNights": 16,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1945,
+   "days": 151,
+   "airFrostNights": 35,
+   "groundFrostNights": 44,
+   "icyRainNights": 16,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1946,
+   "days": 151,
+   "airFrostNights": 25,
+   "groundFrostNights": 54,
+   "icyRainNights": 17,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1947,
+   "days": 151,
+   "airFrostNights": 52,
+   "groundFrostNights": 74,
+   "icyRainNights": 40,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1948,
+   "days": 152,
+   "airFrostNights": 26,
+   "groundFrostNights": 68,
+   "icyRainNights": 29,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1949,
+   "days": 151,
+   "airFrostNights": 17,
+   "groundFrostNights": 56,
+   "icyRainNights": 13,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1950,
+   "days": 151,
+   "airFrostNights": 18,
+   "groundFrostNights": 53,
+   "icyRainNights": 18,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1951,
+   "days": 151,
+   "airFrostNights": 51,
+   "groundFrostNights": 90,
+   "icyRainNights": 45,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1952,
+   "days": 152,
+   "airFrostNights": 46,
+   "groundFrostNights": 73,
+   "icyRainNights": 31,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1953,
+   "days": 151,
+   "airFrostNights": 37,
+   "groundFrostNights": 68,
+   "icyRainNights": 20,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1954,
+   "days": 151,
+   "airFrostNights": 24,
+   "groundFrostNights": 60,
+   "icyRainNights": 23,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1955,
+   "days": 151,
+   "airFrostNights": 44,
+   "groundFrostNights": 79,
+   "icyRainNights": 36,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1956,
+   "days": 152,
+   "airFrostNights": 32,
+   "groundFrostNights": 63,
+   "icyRainNights": 32,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1957,
+   "days": 151,
+   "airFrostNights": 15,
+   "groundFrostNights": 41,
+   "icyRainNights": 19,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1958,
+   "days": 151,
+   "airFrostNights": 32,
+   "groundFrostNights": 63,
+   "icyRainNights": 24,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1959,
+   "days": 151,
+   "airFrostNights": 23,
+   "groundFrostNights": 53,
+   "icyRainNights": 15,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1960,
+   "days": 152,
+   "airFrostNights": 23,
+   "groundFrostNights": 47,
+   "icyRainNights": 21,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1961,
+   "days": 151,
+   "airFrostNights": 20,
+   "groundFrostNights": 58,
+   "icyRainNights": 27,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1962,
+   "days": 151,
+   "airFrostNights": 38,
+   "groundFrostNights": 69,
+   "icyRainNights": 25,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1963,
+   "days": 151,
+   "airFrostNights": 45,
+   "groundFrostNights": 81,
+   "icyRainNights": 27,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1964,
+   "days": 152,
+   "airFrostNights": 16,
+   "groundFrostNights": 58,
+   "icyRainNights": 17,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1965,
+   "days": 151,
+   "airFrostNights": 33,
+   "groundFrostNights": 66,
+   "icyRainNights": 23,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1966,
+   "days": 151,
+   "airFrostNights": 21,
+   "groundFrostNights": 41,
+   "icyRainNights": 21,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1967,
+   "days": 151,
+   "airFrostNights": 17,
+   "groundFrostNights": 38,
+   "icyRainNights": 18,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1968,
+   "days": 152,
+   "airFrostNights": 30,
+   "groundFrostNights": 68,
+   "icyRainNights": 25,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1969,
+   "days": 151,
+   "airFrostNights": 28,
+   "groundFrostNights": 61,
+   "icyRainNights": 18,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1970,
+   "days": 151,
+   "airFrostNights": 45,
+   "groundFrostNights": 79,
+   "icyRainNights": 35,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1971,
+   "days": 151,
+   "airFrostNights": 14,
+   "groundFrostNights": 65,
+   "icyRainNights": 29,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1972,
+   "days": 152,
+   "airFrostNights": 13,
+   "groundFrostNights": 59,
+   "icyRainNights": 26,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1973,
+   "days": 151,
+   "airFrostNights": 23,
+   "groundFrostNights": 61,
+   "icyRainNights": 18,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1974,
+   "days": 151,
+   "airFrostNights": 21,
+   "groundFrostNights": 66,
+   "icyRainNights": 31,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1975,
+   "days": 151,
+   "airFrostNights": 8,
+   "groundFrostNights": 41,
+   "icyRainNights": 16,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1976,
+   "days": 152,
+   "airFrostNights": 13,
+   "groundFrostNights": 45,
+   "icyRainNights": 17,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1977,
+   "days": 151,
+   "airFrostNights": 32,
+   "groundFrostNights": 66,
+   "icyRainNights": 28,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1978,
+   "days": 151,
+   "airFrostNights": 25,
+   "groundFrostNights": 72,
+   "icyRainNights": 36,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1979,
+   "days": 151,
+   "airFrostNights": 40,
+   "groundFrostNights": 71,
+   "icyRainNights": 31,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1980,
+   "days": 152,
+   "airFrostNights": 22,
+   "groundFrostNights": 73,
+   "icyRainNights": 34,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1981,
+   "days": 151,
+   "airFrostNights": 16,
+   "groundFrostNights": 55,
+   "icyRainNights": 20,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1982,
+   "days": 151,
+   "airFrostNights": 27,
+   "groundFrostNights": 65,
+   "icyRainNights": 23,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1983,
+   "days": 151,
+   "airFrostNights": 23,
+   "groundFrostNights": 59,
+   "icyRainNights": 23,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1984,
+   "days": 152,
+   "airFrostNights": 15,
+   "groundFrostNights": 65,
+   "icyRainNights": 31,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1985,
+   "days": 151,
+   "airFrostNights": 36,
+   "groundFrostNights": 84,
+   "icyRainNights": 32,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1986,
+   "days": 151,
+   "airFrostNights": 44,
+   "groundFrostNights": 89,
+   "icyRainNights": 39,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1987,
+   "days": 151,
+   "airFrostNights": 35,
+   "groundFrostNights": 71,
+   "icyRainNights": 26,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1988,
+   "days": 152,
+   "airFrostNights": 18,
+   "groundFrostNights": 60,
+   "icyRainNights": 27,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1989,
+   "days": 151,
+   "airFrostNights": 9,
+   "groundFrostNights": 55,
+   "icyRainNights": 22,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1990,
+   "days": 151,
+   "airFrostNights": 5,
+   "groundFrostNights": 50,
+   "icyRainNights": 18,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1991,
+   "days": 151,
+   "airFrostNights": 25,
+   "groundFrostNights": 82,
+   "icyRainNights": 36,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1992,
+   "days": 152,
+   "airFrostNights": 9,
+   "groundFrostNights": 48,
+   "icyRainNights": 13,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1993,
+   "days": 151,
+   "airFrostNights": 7,
+   "groundFrostNights": 53,
+   "icyRainNights": 19,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1994,
+   "days": 151,
+   "airFrostNights": 15,
+   "groundFrostNights": 71,
+   "icyRainNights": 45,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1995,
+   "days": 151,
+   "airFrostNights": 28,
+   "groundFrostNights": 73,
+   "icyRainNights": 41,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1996,
+   "days": 152,
+   "airFrostNights": 36,
+   "groundFrostNights": 74,
+   "icyRainNights": 32,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1997,
+   "days": 151,
+   "airFrostNights": 44,
+   "groundFrostNights": 86,
+   "icyRainNights": 32,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1998,
+   "days": 151,
+   "airFrostNights": 22,
+   "groundFrostNights": 54,
+   "icyRainNights": 27,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 1999,
+   "days": 151,
+   "airFrostNights": 20,
+   "groundFrostNights": 63,
+   "icyRainNights": 32,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2000,
+   "days": 152,
+   "airFrostNights": 30,
+   "groundFrostNights": 92,
+   "icyRainNights": 42,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2001,
+   "days": 151,
+   "airFrostNights": 47,
+   "groundFrostNights": 81,
+   "icyRainNights": 39,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2002,
+   "days": 151,
+   "airFrostNights": 27,
+   "groundFrostNights": 61,
+   "icyRainNights": 25,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2003,
+   "days": 151,
+   "airFrostNights": 28,
+   "groundFrostNights": 64,
+   "icyRainNights": 20,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2004,
+   "days": 152,
+   "airFrostNights": 40,
+   "groundFrostNights": 91,
+   "icyRainNights": 30,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2005,
+   "days": 151,
+   "airFrostNights": 22,
+   "groundFrostNights": 63,
+   "icyRainNights": 26,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2006,
+   "days": 151,
+   "airFrostNights": 44,
+   "groundFrostNights": 81,
+   "icyRainNights": 28,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2007,
+   "days": 151,
+   "airFrostNights": 21,
+   "groundFrostNights": 68,
+   "icyRainNights": 27,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2008,
+   "days": 152,
+   "airFrostNights": 25,
+   "groundFrostNights": 51,
+   "icyRainNights": 15,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2009,
+   "days": 151,
+   "airFrostNights": 36,
+   "groundFrostNights": 64,
+   "icyRainNights": 26,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2010,
+   "days": 151,
+   "airFrostNights": 76,
+   "groundFrostNights": 92,
+   "icyRainNights": 38,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2011,
+   "days": 151,
+   "airFrostNights": 66,
+   "groundFrostNights": 84,
+   "icyRainNights": 30,
+   "excludedMintp": 0,
+   "excludedGmin": 5,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2012,
+   "days": 152,
+   "airFrostNights": 20,
+   "groundFrostNights": 45,
+   "icyRainNights": 14,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2013,
+   "days": 151,
+   "airFrostNights": 48,
+   "groundFrostNights": 79,
+   "icyRainNights": 39,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2014,
+   "days": 151,
+   "airFrostNights": 12,
+   "groundFrostNights": 62,
+   "icyRainNights": 39,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2015,
+   "days": 151,
+   "airFrostNights": 37,
+   "groundFrostNights": 71,
+   "icyRainNights": 24,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2016,
+   "days": 152,
+   "airFrostNights": 28,
+   "groundFrostNights": 49,
+   "icyRainNights": 27,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2017,
+   "days": 151,
+   "airFrostNights": 30,
+   "groundFrostNights": 57,
+   "icyRainNights": 17,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2018,
+   "days": 151,
+   "airFrostNights": 49,
+   "groundFrostNights": 80,
+   "icyRainNights": 40,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2019,
+   "days": 151,
+   "airFrostNights": 20,
+   "groundFrostNights": 47,
+   "icyRainNights": 19,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2020,
+   "days": 152,
+   "airFrostNights": 26,
+   "groundFrostNights": 51,
+   "icyRainNights": 16,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2021,
+   "days": 151,
+   "airFrostNights": 33,
+   "groundFrostNights": 51,
+   "icyRainNights": 24,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2022,
+   "days": 151,
+   "airFrostNights": 20,
+   "groundFrostNights": 53,
+   "icyRainNights": 14,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2023,
+   "days": 151,
+   "airFrostNights": 31,
+   "groundFrostNights": 51,
+   "icyRainNights": 16,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2024,
+   "days": 152,
+   "airFrostNights": 23,
+   "groundFrostNights": 44,
+   "icyRainNights": 21,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2025,
+   "days": 151,
+   "airFrostNights": 33,
+   "groundFrostNights": 54,
+   "icyRainNights": 13,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  },
+  {
+   "winterYear": 2026,
+   "days": 151,
+   "airFrostNights": 23,
+   "groundFrostNights": 53,
+   "icyRainNights": 25,
+   "excludedMintp": 0,
+   "excludedGmin": 0,
+   "excludedRain": 0
+  }
+ ],
+ "last10WinterYears": [
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "availableWinters": 85,
+ "caveat": "All figures are from ONE lowland coastal station (71m). DLR's higher routes (Mountain, Rathmichael, Ballyogan, Dalkey-Killiney) are not directly measured here — see FLAGS-LOG F2."
+}
