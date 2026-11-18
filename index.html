@@ -440,6 +440,27 @@ function estimateElevationFrostShift(routeElevationM, stationElevationM) {
   return Math.round(-deltaKm * LAPSE_RATE_C_PER_KM * 10) / 10; // negative = colder than station
 }
 
+// Nearest-neighbour routes by centroid distance, precomputed in code so "what about the next
+// closest route" can be answered from a real figure instead of an LLM guessing at geometry from
+// raw lat/lon. Returns { routeId: [{id, name, distanceKm}, ...] }, nearest first.
+function buildNearestNeighbors(routes, n) {
+  n = n || 3;
+  const out = {};
+  for (const a of routes) {
+    const dists = routes
+      .filter((b) => b.id !== a.id)
+      .map((b) => ({
+        id: b.id,
+        name: b.name,
+        distanceKm: Math.round((haversineMeters([a.centroid.lon, a.centroid.lat], [b.centroid.lon, b.centroid.lat]) / 1000) * 10) / 10,
+      }))
+      .sort((x, y) => x.distanceKm - y.distanceKm)
+      .slice(0, n);
+    out[a.id] = dists;
+  }
+  return out;
+}
+
 // Rank routes for the Senior Engineer: higher modelled frost-night estimate AND longer route (more
 // network exposed) score higher priority. This is a transparent, re-computable score — not a black box.
 function rankRoutesForPriority(routesWithElevation, avgGroundFrostNights, stationElevationM) {
@@ -461,7 +482,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     haversineMeters, nightWindow, summarizeRouteNight, pickSpreadBand, decideRoute,
     pickDepartTime, assignTrucks, estimateElevationFrostShift, rankRoutesForPriority,
-    RST_TRIGGER_C, LAPSE_RATE_C_PER_KM,
+    buildNearestNeighbors, RST_TRIGGER_C, LAPSE_RATE_C_PER_KM,
   };
 }
 </script>
@@ -1000,22 +1021,50 @@ if (typeof module !== "undefined" && module.exports) {
     return div;
   }
 
-  function buildChatDataBundle(routesData, opsFacts, historyData) {
+  // The data bundle is rebuilt fresh on every question (so it always reflects the latest tonight's
+  // call / ranking) but lives in the SYSTEM prompt, not inline in the user's message. That keeps the
+  // visible conversation clean — just questions and answers — so the model follows "the next one"
+  // style follow-ups naturally instead of re-parsing a JSON dump each turn, and it reads less like a
+  // database printout. Distances are precomputed in code (buildNearestNeighbors), not left for the
+  // model to estimate from raw coordinates.
+  function buildChatSystemPrompt(routesData, opsFacts, historyData) {
     const last10 = historyData.winters.filter((w) => historyData.last10WinterYears.includes(w.winterYear));
     const s1 = window.__ww_s1;
     const s2 = window.__ww_s2;
-    return {
-      routes: routesData.routes.map((r) => ({ name: r.name, length_km: r.length_km, assignedTruck: r.assignedTruck })),
+    const nn = buildNearestNeighbors(routesData.routes, 3);
+
+    const bundle = {
+      routes: routesData.routes.map((r) => ({
+        name: r.name,
+        length_km: r.length_km,
+        assignedTruck: r.assignedTruck,
+        nearestRoutes: nn[r.id].map((x) => `${x.name} (${x.distanceKm}km away)`),
+      })),
       operationalFacts: opsFacts,
       last10WinterHistory: last10,
       historyDefinitions: historyData.definitions,
       tonightsCall: s1
-        ? { verdict: s1.willGrit ? "GRIT" : "NO_GRIT", routesToTreat: s1.needingTreatment.map((r) => ({ name: r.name, forecastLowC: r.stats.minTempC })), trucksNeeded: s1.assigned.length }
-        : "Not generated yet — the Duty Engineer hasn't clicked 'Get tonight's call' in section 1 this visit.",
+        ? {
+            verdict: s1.willGrit ? "GRIT" : "NO_GRIT",
+            windowNote: "18:00 tonight to 09:00 tomorrow, Europe/Dublin",
+            everyRouteForecastLowC: s1.perRoute.map((r) => ({ name: r.name, forecastLowC: r.stats ? r.stats.minTempC : null, beingTreated: r.decision.treat })),
+            trucksNeeded: s1.assigned.length,
+          }
+        : "Not generated yet this visit — the Duty Engineer hasn't clicked 'Get tonight's call' in section 1. If asked about tonight's forecast or verdict, say it hasn't been generated yet rather than guessing.",
       priorityRanking: s2
         ? s2.ranked.slice(0, 5).map((r) => ({ name: r.name, estFrostNights: r.estFrostNights, length_km: r.length_km }))
-        : "Not generated yet — open the 'Route Priority Planner' card to compute it.",
+        : "Not generated yet this visit — open the 'Route Priority Planner' card to compute it.",
     };
+
+    return (
+      "You are Winter Watch's assistant for Dun Laoghaire-Rathdown's winter gritting operation, chatting with a colleague on the team. " +
+      "Answer ONLY using the DATA below and the conversation so far — never invent a route name, number, date or figure that isn't in it, and never use outside/general knowledge about Dublin, weather or geography. " +
+      "If a question needs something the data doesn't contain, say so plainly in one line rather than guessing. " +
+      "Use the conversation history: if a follow-up refers back to something discussed earlier ('that route', 'the next closest one', 'what about last year'), resolve it from the earlier turns before answering. " +
+      "Write like a helpful colleague, not a report: short natural sentences, everyday phrasing, numbers stated the way a person would say them (e.g. 'about -6°C', 'wettest in 2018 with 80 ground-frost nights') — never recite JSON keys, field names or raw object notation back at the user. " +
+      "Don't open every answer the same way (drop boilerplate like 'Based on the data provided'); just answer. Keep it to 2-4 sentences unless a short list genuinely reads better as a list.\n\n" +
+      `DATA:\n${JSON.stringify(bundle)}`
+    );
   }
 
   async function sendChat() {
@@ -1027,19 +1076,19 @@ if (typeof module !== "undefined" && module.exports) {
     const sendBtn = document.getElementById("chatSendBtn");
     sendBtn.disabled = true;
     const placeholder = appendChatMsg("ai", "…");
+    const turn = [{ role: "user", content: q }];
 
     try {
       const data = await loadStaticData();
-      const bundle = buildChatDataBundle(data.routesData, data.opsFacts, data.historyData);
-      const system = "You are Winter Watch's assistant for Dun Laoghaire-Rathdown's winter gritting operation. Answer ONLY using the DATA JSON given in this conversation — real gritting routes, 10 winters of real Met Eireann history, DLR's own operational facts, and (if present) the already-computed tonight's call and route priority ranking. Never invent a route name, number, date or figure that isn't in the data. If the question needs something the data doesn't contain, say so plainly instead of guessing — don't use outside/general knowledge about Dublin or weather. Keep answers to 2-4 short sentences, plain text, no markdown, no JSON.";
-      chatState.history.push({ role: "user", content: `DATA:\n${JSON.stringify(bundle)}\n\nQuestion: ${q}` });
-      if (chatState.history.length > 12) chatState.history = chatState.history.slice(-12);
-      const answer = await callAnthropic(system, chatState.history, "low");
+      const system = buildChatSystemPrompt(data.routesData, data.opsFacts, data.historyData);
+      const answer = await callAnthropic(system, [...chatState.history, ...turn], "low");
       placeholder.textContent = answer;
-      chatState.history.push({ role: "assistant", content: answer });
+      chatState.history.push(...turn, { role: "assistant", content: answer });
+      // Trim by whole pairs from the front so the array always still starts with a user turn
+      // (the API requires it) — keep the last ~8 exchanges.
+      while (chatState.history.length > 16) chatState.history.splice(0, 2);
     } catch (err) {
       placeholder.textContent = "⚠ " + err.message;
-      chatState.history.pop();
     } finally {
       sendBtn.disabled = false;
     }
