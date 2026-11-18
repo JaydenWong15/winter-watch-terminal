@@ -194,6 +194,19 @@
   .rank-table tr.top-pick { background: color-mix(in srgb, var(--warn) 10%, transparent); }
   .rank-badge { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background: var(--tile-bg); border:1px solid var(--border); font-size:0.75rem; font-weight:700; }
 
+  .empty-state { text-align: center; padding: 18px 8px 8px; }
+  .empty-state p { margin: 0 0 14px; color: var(--muted); font-size: 0.9rem; max-width: 46ch; margin-left:auto; margin-right:auto; }
+  button.btn.btn-lg { font-size: 1rem; padding: 12px 26px; border-radius: 10px; }
+
+  .chat-log { display:flex; flex-direction:column; gap:10px; max-height: 380px; overflow-y:auto; padding: 4px 2px 10px; }
+  .chat-msg { max-width: 85%; padding:9px 13px; border-radius:12px; font-size:0.88rem; line-height:1.45; white-space:pre-wrap; }
+  .chat-msg.user { align-self:flex-end; background: var(--accent); color:#04121c; border-bottom-right-radius:3px; }
+  .chat-msg.ai { align-self:flex-start; background: var(--tile-bg); border:1px solid var(--border); border-bottom-left-radius:3px; }
+  .chat-msg.hint { align-self:flex-start; background:transparent; border:1px dashed var(--border); color: var(--muted); font-size:0.82rem; }
+  .chat-input-row { display:flex; gap:8px; }
+  .chat-input-row input { flex:1; background:var(--tile-bg); border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:var(--text); font:inherit; min-width: 0; }
+  .chat-input-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
   @media (max-width: 560px) {
     header.top h1 { font-size: 1.5rem; }
     .theme-toggle { position: static; display: inline-block; margin-top: 10px; }
@@ -214,8 +227,15 @@
     <details class="card" id="section1" open>
       <summary><span class="num">1</span> Tonight's Decision <span class="tag" id="s1tag">Duty Engineer</span></summary>
       <div class="card-body">
-        <div id="s1status" class="muted"><span class="spinner"></span> Loading routes and live forecast…</div>
+        <div id="s1Idle" class="empty-state">
+          <p>Pull tonight's live forecast for every route and get a grit / no-grit call, computed from DLR's own rules — not a guess.</p>
+          <button class="btn btn-lg" id="getCallBtn" type="button">📞 Get tonight's call</button>
+        </div>
+        <div id="s1status" class="muted" hidden></div>
         <div id="s1content" hidden>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
+            <button class="btn secondary" id="refreshCallBtn" type="button" style="font-size:0.78rem;padding:5px 10px;">🔄 Refresh</button>
+          </div>
           <div id="verdictBanner" class="verdict-banner"></div>
           <div class="tiles" id="s1tiles"></div>
 
@@ -244,19 +264,47 @@
       </div>
     </details>
 
+    <details class="card" id="sectionChat">
+      <summary><span class="num">2</span> Ask Winter Watch <span class="tag">Anyone</span></summary>
+      <div class="card-body">
+        <div id="chatLog" class="chat-log"></div>
+        <div class="chat-input-row">
+          <input id="chatInput" type="text" placeholder="e.g. How many ground-frost nights did winter 2018 have?" autocomplete="off" />
+          <button class="btn" id="chatSendBtn" type="button">Ask</button>
+        </div>
+        <p class="src-line">Answers are grounded only in Winter Watch's own data — real routes, 10 winters of real history, DLR's operational facts, and tonight's call once you've generated it. Not general knowledge, and never a substitute for the computed verdict above.</p>
+      </div>
+    </details>
+
     <details class="card" id="section2">
-      <summary><span class="num">2</span> Route Priority Planner <span class="tag">Senior Engineer</span></summary>
+      <summary><span class="num">3</span> Route Priority Planner <span class="tag">Senior Engineer</span></summary>
       <div class="card-body">
         <div id="s2status" class="muted">Loading…</div>
         <div id="s2content" hidden></div>
       </div>
     </details>
 
-    <details class="card" id="section3">
-      <summary><span class="num">3</span> Winter History &amp; Routes <span class="tag">Reference data</span></summary>
+    <details class="card" id="section4">
+      <summary><span class="num">4</span> Frost History <span class="tag">Reference data</span></summary>
       <div class="card-body">
-        <div id="s3status" class="muted">Loading…</div>
-        <div id="s3content" hidden></div>
+        <div id="s4status" class="muted">Loading…</div>
+        <div id="s4content" hidden></div>
+      </div>
+    </details>
+
+    <details class="card" id="section5">
+      <summary><span class="num">5</span> Route Network <span class="tag">Reference data</span></summary>
+      <div class="card-body">
+        <div id="s5status" class="muted">Loading…</div>
+        <div id="s5content" hidden></div>
+      </div>
+    </details>
+
+    <details class="card" id="section6">
+      <summary><span class="num">6</span> Operational Facts <span class="tag">Reference data</span></summary>
+      <div class="card-body">
+        <div id="s6status" class="muted">Loading…</div>
+        <div id="s6content" hidden></div>
       </div>
     </details>
 
@@ -475,13 +523,13 @@ if (typeof module !== "undefined" && module.exports) {
     return JSON.parse(text.slice(start, end + 1));
   }
 
-  // Calls the Cloudflare proxy with an Anthropic Messages API body and returns the parsed JSON card.
-  async function callAi(system, data, effort) {
+  // Calls the Cloudflare proxy with an Anthropic Messages API body and returns the raw reply text.
+  async function callAnthropic(system, messages, effort) {
     const payload = {
       model: AI_MODEL,
       max_tokens: AI_MAX_TOKENS,
       system,
-      messages: [{ role: "user", content: JSON.stringify(data) }],
+      messages,
       output_config: { effort },
     };
     const r = await fetch(WORKER_URL, {
@@ -491,11 +539,17 @@ if (typeof module !== "undefined" && module.exports) {
     });
     const j = await r.json();
     if (!r.ok) throw new Error((j.error && j.error.message) || `proxy HTTP ${r.status}`);
-    if (j.stop_reason === "refusal") throw new Error("The model declined to answer this one — the computed verdict above is unaffected.");
+    if (j.stop_reason === "refusal") throw new Error("The model declined to answer this one.");
     if (j.stop_reason === "max_tokens") throw new Error("Reply was cut off — try again.");
     const textBlock = (j.content || []).find((b) => b.type === "text");
     if (!textBlock) throw new Error("No text in reply.");
-    return extractJsonObject(textBlock.text);
+    return textBlock.text;
+  }
+
+  // Structured-JSON variant used by the explain buttons (verdict/ranking cards).
+  async function callAi(system, data, effort) {
+    const text = await callAnthropic(system, [{ role: "user", content: JSON.stringify(data) }], effort);
+    return extractJsonObject(text);
   }
 
   async function fetchForecastForRoutes(routes) {
@@ -511,6 +565,10 @@ if (typeof module !== "undefined" && module.exports) {
   async function initSection1(routesData, opsFacts) {
     const statusEl = document.getElementById("s1status");
     const contentEl = document.getElementById("s1content");
+    document.getElementById("s1Idle").hidden = true;
+    contentEl.hidden = true;
+    statusEl.hidden = false;
+    statusEl.innerHTML = `<span class="spinner"></span> Loading live forecast for every route…`;
     try {
       const nowIso = new Date().toISOString().slice(0, 16);
       const forecasts = await fetchForecastForRoutes(routesData.routes);
@@ -574,7 +632,10 @@ if (typeof module !== "undefined" && module.exports) {
       window.__ww_s1 = { perRoute, needingTreatment, assigned, shortage, opsFacts, willGrit };
       return window.__ww_s1;
     } catch (err) {
-      statusEl.innerHTML = `⚠ Could not load live forecast: ${err.message}. Try refreshing — Open-Meteo is a free public API with no key required.`;
+      statusEl.innerHTML = `⚠ Could not load live forecast: ${err.message}`;
+      const idle = document.getElementById("s1Idle");
+      idle.hidden = false;
+      document.getElementById("getCallBtn").textContent = "🔄 Try again";
       return null;
     }
   }
@@ -619,6 +680,25 @@ if (typeof module !== "undefined" && module.exports) {
   }
 
   document.getElementById("askAiBtn").addEventListener("click", askAi);
+
+  async function runTonightsCall(btn) {
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Fetching…";
+    try {
+      const data = await loadStaticData();
+      await initSection1(data.routesData, data.opsFacts);
+    } catch (err) {
+      document.getElementById("s1Idle").hidden = false;
+      document.getElementById("s1status").hidden = true;
+      document.getElementById("getCallBtn").textContent = "🔄 Try again";
+    } finally {
+      btn.disabled = false;
+      if (document.body.contains(btn)) btn.textContent = label;
+    }
+  }
+  document.getElementById("getCallBtn").addEventListener("click", (e) => runTonightsCall(e.currentTarget));
+  document.getElementById("refreshCallBtn").addEventListener("click", (e) => runTonightsCall(e.currentTarget));
 
   // Shared decision log lives in the Worker's KV store (so the Duty Engineer and Senior
   // Engineer see the same history regardless of whose browser they're on). localStorage is
@@ -668,18 +748,13 @@ if (typeof module !== "undefined" && module.exports) {
   });
   renderDecisionLog();
 
-  // ---- Section 2: Route Priority Planner ----
-  async function initSection2(routesData, opsFacts, historyData, s1) {
+  // ---- Section 2: Route Priority Planner (lazy — built the first time the card opens) ----
+  async function initSection2(routesData, opsFacts, historyData) {
     const statusEl = document.getElementById("s2status");
     const contentEl = document.getElementById("s2content");
     try {
-      let elevByRoute;
-      if (s1 && s1.perRoute) {
-        elevByRoute = Object.fromEntries(s1.perRoute.map((r) => [r.id, r.elevation_m]));
-      } else {
-        const forecasts = await fetchForecastForRoutes(routesData.routes);
-        elevByRoute = Object.fromEntries(routesData.routes.map((r, i) => [r.id, forecasts[i].elevation]));
-      }
+      const forecasts = await fetchForecastForRoutes(routesData.routes);
+      const elevByRoute = Object.fromEntries(routesData.routes.map((r, i) => [r.id, forecasts[i].elevation]));
       const last10 = historyData.winters.filter((w) => historyData.last10WinterYears.includes(w.winterYear));
       const avgGroundFrost = last10.reduce((s, w) => s + w.groundFrostNights, 0) / last10.length;
 
@@ -728,8 +803,10 @@ if (typeof module !== "undefined" && module.exports) {
 
       statusEl.hidden = true;
       contentEl.hidden = false;
+      return window.__ww_s2;
     } catch (err) {
       statusEl.innerHTML = `⚠ Could not build the priority ranking: ${err.message}`;
+      return null;
     }
   }
 
@@ -843,15 +920,13 @@ if (typeof module !== "undefined" && module.exports) {
     return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto;" role="img" aria-label="Map of DLR gritting routes">${paths}</svg>`;
   }
 
-  async function initSection3(routesData, opsFacts, historyData) {
-    const statusEl = document.getElementById("s3status");
-    const contentEl = document.getElementById("s3content");
+  // ---- Section 4: Frost History (lazy) ----
+  async function initSection4(historyData) {
+    const statusEl = document.getElementById("s4status");
+    const contentEl = document.getElementById("s4content");
     try {
-      const geo = await fetchJSON("data/raw/dlr-gritting-routes.geojson");
       const last10 = historyData.winters.filter((w) => historyData.last10WinterYears.includes(w.winterYear));
-
       contentEl.innerHTML = `
-        <h3 style="margin-top:0;font-size:0.95rem;">Frost nights per winter, last ${last10.length} winters</h3>
         <div class="chart-wrap">
           <div class="chart-legend">
             <span class="key"><span class="swatch" style="background:var(--series-ground)"></span>Ground frost (gmin ≤ 0°C)</span>
@@ -860,50 +935,171 @@ if (typeof module !== "undefined" && module.exports) {
           <div id="chartHost"></div>
         </div>
         <p class="src-line">Source: Met Éireann Dublin Airport daily data (station 532), CC-BY 4.0. Ground frost is the closer proxy for road-surface risk. Winters with excluded (missing/estimated) readings: ${last10.filter((w) => w.excludedGmin > 0 || w.excludedMintp > 0).map((w) => w.winterYear).join(", ") || "none"}.</p>
+      `;
+      document.getElementById("chartHost").innerHTML = buildFrostChart(last10);
+      wireChartTooltips(document.getElementById("chartHost"));
+      statusEl.hidden = true;
+      contentEl.hidden = false;
+    } catch (err) {
+      statusEl.innerHTML = `⚠ Could not load frost history: ${err.message}`;
+    }
+  }
 
-        <h3 style="font-size:0.95rem;">Route map — Dún Laoghaire-Rathdown gritting network</h3>
+  // ---- Section 5: Route Network (lazy) ----
+  async function initSection5(routesData) {
+    const statusEl = document.getElementById("s5status");
+    const contentEl = document.getElementById("s5content");
+    try {
+      const geo = await fetchJSON("data/raw/dlr-gritting-routes.geojson");
+      contentEl.innerHTML = `
         <div id="mapHost"></div>
         <p class="src-line">${routesData.routes.length} routes, ${routesData.routes.reduce((s, r) => s + r.length_km, 0).toFixed(0)}km total. Source: data.gov.ie, CC-BY 4.0.</p>
-
-        <h3 style="font-size:0.95rem;">All routes</h3>
         <table class="rank-table">
           <thead><tr><th>Route</th><th>Length</th><th>Assigned truck</th></tr></thead>
           <tbody>${routesData.routes.map((r) => `<tr><td>${r.name}</td><td>${r.length_km}km</td><td>${r.assignedTruck}</td></tr>`).join("")}</tbody>
         </table>
-
-        <h3 style="font-size:0.95rem;">Operational facts</h3>
-        <p class="muted">${opsFacts.fleet.regularGrittingTrucks} regular gritting trucks + ${opsFacts.fleet.spareGrittingTrucks} spares, ${opsFacts.fleet.qualifiedDrivers} qualified drivers, single depot (${opsFacts.fleet.depot}). Treatment run ≈${opsFacts.timing.treatmentRunHours}h/route. Minimum salt stock: ${opsFacts.saltStock.minimumFullTreatments} full-network treatments. Salt is ineffective in the short term below ${opsFacts.saltIneffectiveBelowC}°C — abrasives are used instead.</p>
-        <p class="src-line">Source: DLR Winter Service Plan 2024/2025.</p>
       `;
-
-      document.getElementById("chartHost").innerHTML = buildFrostChart(last10);
-      wireChartTooltips(document.getElementById("chartHost"));
       document.getElementById("mapHost").innerHTML = buildRouteMap(geo);
-
       statusEl.hidden = true;
       contentEl.hidden = false;
     } catch (err) {
-      statusEl.innerHTML = `⚠ Could not load history/route reference data: ${err.message}`;
+      statusEl.innerHTML = `⚠ Could not load the route map: ${err.message}`;
     }
   }
 
+  // ---- Section 6: Operational Facts (lazy) ----
+  async function initSection6(opsFacts) {
+    const statusEl = document.getElementById("s6status");
+    const contentEl = document.getElementById("s6content");
+    try {
+      contentEl.innerHTML = `
+        <p class="muted">${opsFacts.fleet.regularGrittingTrucks} regular gritting trucks + ${opsFacts.fleet.spareGrittingTrucks} spares, ${opsFacts.fleet.qualifiedDrivers} qualified drivers, single depot (${opsFacts.fleet.depot}). Treatment run ≈${opsFacts.timing.treatmentRunHours}h/route. Gritting normally runs at ${opsFacts.timing.normalStartTimes.join(" and/or ")}. Minimum salt stock: ${opsFacts.saltStock.minimumFullTreatments} full-network treatments. Salt is ineffective in the short term below ${opsFacts.saltIneffectiveBelowC}°C — abrasives are used instead.</p>
+        <table class="rank-table">
+          <thead><tr><th>RST band</th><th>Dry/damp road</th><th>Wet road</th></tr></thead>
+          <tbody>${opsFacts.spreadRateMatrix_gPerM2.bands.map((b) => `<tr><td>${b.label}</td><td>${b.dryDampRoad} g/m²</td><td>${b.wetRoad} g/m²</td></tr>`).join("")}</tbody>
+        </table>
+        <p class="src-line">Source: DLR Winter Service Plan 2024/2025.</p>
+      `;
+      statusEl.hidden = true;
+      contentEl.hidden = false;
+    } catch (err) {
+      statusEl.innerHTML = `⚠ Could not load operational facts: ${err.message}`;
+    }
+  }
+
+  // ---- Ask Winter Watch (chat) ----
+  const chatState = { history: [] };
+
+  function appendChatMsg(role, text) {
+    const log = document.getElementById("chatLog");
+    const div = document.createElement("div");
+    div.className = "chat-msg " + role;
+    div.textContent = text;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+    return div;
+  }
+
+  function buildChatDataBundle(routesData, opsFacts, historyData) {
+    const last10 = historyData.winters.filter((w) => historyData.last10WinterYears.includes(w.winterYear));
+    const s1 = window.__ww_s1;
+    const s2 = window.__ww_s2;
+    return {
+      routes: routesData.routes.map((r) => ({ name: r.name, length_km: r.length_km, assignedTruck: r.assignedTruck })),
+      operationalFacts: opsFacts,
+      last10WinterHistory: last10,
+      historyDefinitions: historyData.definitions,
+      tonightsCall: s1
+        ? { verdict: s1.willGrit ? "GRIT" : "NO_GRIT", routesToTreat: s1.needingTreatment.map((r) => ({ name: r.name, forecastLowC: r.stats.minTempC })), trucksNeeded: s1.assigned.length }
+        : "Not generated yet — the Duty Engineer hasn't clicked 'Get tonight's call' in section 1 this visit.",
+      priorityRanking: s2
+        ? s2.ranked.slice(0, 5).map((r) => ({ name: r.name, estFrostNights: r.estFrostNights, length_km: r.length_km }))
+        : "Not generated yet — open the 'Route Priority Planner' card to compute it.",
+    };
+  }
+
+  async function sendChat() {
+    const input = document.getElementById("chatInput");
+    const q = input.value.trim();
+    if (!q) return;
+    input.value = "";
+    appendChatMsg("user", q);
+    const sendBtn = document.getElementById("chatSendBtn");
+    sendBtn.disabled = true;
+    const placeholder = appendChatMsg("ai", "…");
+
+    try {
+      const data = await loadStaticData();
+      const bundle = buildChatDataBundle(data.routesData, data.opsFacts, data.historyData);
+      const system = "You are Winter Watch's assistant for Dun Laoghaire-Rathdown's winter gritting operation. Answer ONLY using the DATA JSON given in this conversation — real gritting routes, 10 winters of real Met Eireann history, DLR's own operational facts, and (if present) the already-computed tonight's call and route priority ranking. Never invent a route name, number, date or figure that isn't in the data. If the question needs something the data doesn't contain, say so plainly instead of guessing — don't use outside/general knowledge about Dublin or weather. Keep answers to 2-4 short sentences, plain text, no markdown, no JSON.";
+      chatState.history.push({ role: "user", content: `DATA:\n${JSON.stringify(bundle)}\n\nQuestion: ${q}` });
+      if (chatState.history.length > 12) chatState.history = chatState.history.slice(-12);
+      const answer = await callAnthropic(system, chatState.history, "low");
+      placeholder.textContent = answer;
+      chatState.history.push({ role: "assistant", content: answer });
+    } catch (err) {
+      placeholder.textContent = "⚠ " + err.message;
+      chatState.history.pop();
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+
+  document.getElementById("chatSendBtn").addEventListener("click", sendChat);
+  document.getElementById("chatInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendChat();
+  });
+
   // ---- boot ----
-  Promise.all([
-    fetchJSON("data/routes-summary.json"),
-    fetchJSON("data/dlr-ops-facts.json"),
-    fetchJSON("data/winter-history.json"),
-  ])
-    .then(async ([routesData, opsFacts, historyData]) => {
-      window.__ww_routes = routesData;
-      window.__ww_history = historyData;
-      window.__ww_ops = opsFacts;
-      const s1 = await initSection1(routesData, opsFacts);
-      initSection2(routesData, opsFacts, historyData, s1);
-      initSection3(routesData, opsFacts, historyData);
-    })
-    .catch((err) => {
-      document.getElementById("s1status").textContent = "⚠ Could not load route/history data: " + err.message;
+  // Static data (routes/ops/history) is small and same-origin, so it loads once up front.
+  // The LIVE forecast (Open-Meteo) is only ever fetched on demand: by "Get tonight's call",
+  // or lazily the first time the Priority Planner / Frost History / Route Network cards open —
+  // nothing external is called just from landing on the page.
+  let staticDataPromise = null;
+  function loadStaticData() {
+    if (!staticDataPromise) {
+      staticDataPromise = Promise.all([
+        fetchJSON("data/routes-summary.json"),
+        fetchJSON("data/dlr-ops-facts.json"),
+        fetchJSON("data/winter-history.json"),
+      ]).then(([routesData, opsFacts, historyData]) => ({ routesData, opsFacts, historyData }));
+    }
+    return staticDataPromise;
+  }
+  loadStaticData().catch((err) => {
+    document.getElementById("s1Idle").innerHTML = `<p class="muted">⚠ Could not load Winter Watch's data: ${err.message}</p>`;
+  });
+
+  function onFirstOpen(id, fn) {
+    const el = document.getElementById(id);
+    let built = false;
+    el.addEventListener("toggle", () => {
+      if (el.open && !built) {
+        built = true;
+        fn();
+      }
     });
+  }
+
+  onFirstOpen("sectionChat", () => {
+    appendChatMsg("hint", "Ask about routes, the live forecast, 10 winters of history, trucks, or tonight's call.");
+  });
+  onFirstOpen("section2", async () => {
+    const data = await loadStaticData();
+    initSection2(data.routesData, data.opsFacts, data.historyData);
+  });
+  onFirstOpen("section4", async () => {
+    const data = await loadStaticData();
+    initSection4(data.historyData);
+  });
+  onFirstOpen("section5", async () => {
+    const data = await loadStaticData();
+    initSection5(data.routesData);
+  });
+  onFirstOpen("section6", async () => {
+    const data = await loadStaticData();
+    initSection6(data.opsFacts);
+  });
 })();
 </script>
 </body>
