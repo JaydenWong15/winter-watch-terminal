@@ -1047,7 +1047,7 @@ if (typeof module !== "undefined" && module.exports) {
         ? {
             verdict: s1.willGrit ? "GRIT" : "NO_GRIT",
             windowNote: "18:00 tonight to 09:00 tomorrow, Europe/Dublin",
-            everyRouteForecastLowC: s1.perRoute.map((r) => ({ name: r.name, forecastLowC: r.stats ? r.stats.minTempC : null, beingTreated: r.decision.treat })),
+            everyRouteForecastLow: s1.perRoute.map((r) => ({ name: r.name, forecastLow: r.stats ? fmtC(r.stats.minTempC) : "no forecast", beingTreated: r.decision.treat ? "yes, being gritted" : "no" })),
             trucksNeeded: s1.assigned.length,
           }
         : "Not generated yet this visit — the Duty Engineer hasn't clicked 'Get tonight's call' in section 1. If asked about tonight's forecast or verdict, say it hasn't been generated yet rather than guessing.",
@@ -1086,7 +1086,7 @@ if (typeof module !== "undefined" && module.exports) {
       chatState.history.push(...turn, { role: "assistant", content: answer });
       // Trim by whole pairs from the front so the array always still starts with a user turn
       // (the API requires it) — keep the last ~8 exchanges.
-      while (chatState.history.length > 16) chatState.history.splice(0, 2);
+      while (chatState.history.length > 12) chatState.history.splice(0, 2);
     } catch (err) {
       placeholder.textContent = "⚠ " + err.message;
     } finally {
